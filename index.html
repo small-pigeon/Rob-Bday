@@ -2,164 +2,177 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Happy Birthday Rob!</title>
+<title>Happy Birthday Rob</title>
 <style>
-  body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: #fef6f6;
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-  }
+body {
+  background: #323641;
+  font-family: sans-serif;
+}
 
-  .letter-image {
-    position: relative;
-    width: 300px;
-    height: 200px;
-    perspective: 1000px;
-    cursor: pointer;
-  }
+.letter-image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
 
-  .animated-mail {
-    width: 100%;
-    height: 100%;
-    transform-style: preserve-3d;
-    transition: transform 1s;
-    transform-origin: top;
-    position: relative;
-  }
+.animated-mail {
+  position: absolute;
+  height: 150px;
+  width: 200px;
+  transition: 0.4s;
+}
 
-  .letter {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: #fff;
-    border: 2px solid #ccc;
-    box-sizing: border-box;
-    z-index: 2;
-    overflow: hidden;
-  }
+/* Envelope parts */
+.animated-mail .body {
+  position: absolute;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 0 100px 200px;
+  border-color: transparent transparent #e95f55 transparent;
+  z-index: 2;
+}
 
-  .letter-title {
-    margin-top: 20px;
-    text-align: center;
-    font-size: 24px;
-    font-weight: bold;
-    color: #ff4d4d;
-  }
+.animated-mail .top-fold {
+  position: absolute;
+  top: 50px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 50px 100px 0 100px;
+  transform-origin: 50% 0%;
+  transition: transform 0.4s 0.4s, z-index 0.2s 0.4s;
+  border-color: #cf4a43 transparent transparent transparent;
+  z-index: 2;
+}
 
-  .letter-content {
-    margin-top: 20px;
-    text-align: center;
-    font-size: 20px;
-    font-weight: bold;
-    color: #ff7f50;
-  }
+.animated-mail .back-fold {
+  position: absolute;
+  bottom: 0;
+  width: 200px;
+  height: 100px;
+  background: #cf4a43;
+  z-index: 0;
+}
 
-  .top-fold {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 50%;
-    background: #d1b3ff;
-    transform-origin: top;
-    z-index: 3;
-    border-bottom: 2px solid #ccc;
-  }
+.animated-mail .left-fold {
+  position: absolute;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 50px 0 50px 100px;
+  border-color: transparent transparent transparent #e15349;
+  z-index: 2;
+}
 
-  .shadow {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.1);
-    z-index: 0;
-    border-radius: 5px;
-  }
+/* Letter inside envelope */
+.animated-mail .letter {
+  left: 20px;
+  bottom: 0px;
+  position: absolute;
+  width: 160px;
+  height: 60px;
+  background: white;
+  z-index: 1;
+  overflow: hidden;
+  transition: 0.4s 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 
-  /* Wiggle animation */
-  @keyframes wiggle {
-    0%, 100% { transform: rotate(0deg); }
-    25% { transform: rotate(2deg); }
-    50% { transform: rotate(-2deg); }
-    75% { transform: rotate(2deg); }
-  }
+.letter .letter-border {
+  height: 10px;
+  width: 100%;
+  background: repeating-linear-gradient(
+    -45deg,
+    #cb5a5e,
+    #cb5a5e 8px,
+    transparent 8px,
+    transparent 18px
+  );
+}
 
-  /* Sparkle animation */
-  .sparkle {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    background: gold;
-    border-radius: 50%;
-    opacity: 0;
-    animation: sparkle 1.5s infinite;
-  }
+.letter .letter-title {
+  font-weight: bold;
+  font-size: 16px;
+  color: #cb5a5e;
+  margin-bottom: 5px;
+}
 
-  @keyframes sparkle {
-    0% { opacity: 0; transform: scale(0); }
-    50% { opacity: 1; transform: scale(1.5); }
-    100% { opacity: 0; transform: scale(0); }
-  }
+.letter .letter-context {
+  font-weight: bold;
+  font-size: 18px;
+  color: #ff4d4d;
+  text-align: center;
+}
 
+/* Stamp */
+.letter .letter-stamp {
+  margin-top: 5px;
+  border-radius: 100%;
+  height: 30px;
+  width: 30px;
+  background: #cb5a5e;
+  opacity: 0.3;
+}
+
+/* Shadow */
+.shadow {
+  position: absolute;
+  top: 200px;
+  left: 50%;
+  width: 400px;
+  height: 30px;
+  transform: translateX(-50%);
+  border-radius: 100%;
+  background: radial-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.0), rgba(0,0,0,0.0));
+  transition: 0.4s;
+}
+
+/* Hover/open effect */
+.letter-image:hover .animated-mail {
+  transform: translateY(50px);
+}
+
+.letter-image:hover .animated-mail .top-fold {
+  transform: rotateX(180deg);
+  z-index: 0;
+}
+
+.letter-image:hover .animated-mail .letter {
+  height: 180px;
+}
+
+.letter-image:hover .shadow {
+  width: 250px;
+}
 </style>
 </head>
 <body>
 
-<div class="letter-image" id="letter">
-  <div class="animated-mail" id="mail">
+<div class="letter-image">
+  <div class="animated-mail">
+    <div class="back-fold"></div>
     <div class="letter">
-      <div class="letter-title">Open Me!</div>
-      <div class="letter-content" id="message" style="display:none;">🎉 Happy Birthday Rob! 🎉</div>
+      <div class="letter-border"></div>
+      <div class="letter-title">Happy Birthday</div>
+      <div class="letter-context">Rob!</div>
+      <div class="letter-stamp"></div>
     </div>
     <div class="top-fold"></div>
+    <div class="body"></div>
+    <div class="left-fold"></div>
   </div>
   <div class="shadow"></div>
 </div>
-
-<script>
-  const letter = document.getElementById('letter');
-  const mail = document.getElementById('mail');
-  const message = document.getElementById('message');
-
-  letter.addEventListener('click', () => {
-    mail.style.transform = 'rotateX(-180deg)';
-    message.style.display = 'block';
-    letter.classList.add('wiggle');
-    spawnSparkles();
-  });
-
-  // Wiggle effect
-  letter.addEventListener('animationend', () => {
-    letter.classList.remove('wiggle');
-  });
-
-  // Sparkle effect
-  function spawnSparkles() {
-    for (let i=0; i<30; i++) {
-      const sparkle = document.createElement('div');
-      sparkle.classList.add('sparkle');
-      sparkle.style.top = Math.random() * 180 + 'px';
-      sparkle.style.left = Math.random() * 300 + 'px';
-      sparkle.style.animationDelay = (Math.random()*1.5)+'s';
-      letter.appendChild(sparkle);
-
-      // Remove sparkle after animation
-      setTimeout(() => {
-        sparkle.remove();
-      }, 1500);
-    }
-  }
-
-  // Add wiggle class when opening
-  letter.classList.add('wiggle');
-  const style = document.createElement('style');
-  style.innerHTML = `.wiggle { animation: wiggle 0.5s ease-in-out; }`;
-  document.head.appendChild(style);
-</script>
 
 </body>
 </html>
