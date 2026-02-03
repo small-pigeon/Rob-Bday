@@ -2,27 +2,29 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Happy Birthday Rob</title>
+<title>Happy Birthday Rob!</title>
 <style>
 body {
   background: #323641;
-  font-family: sans-serif;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .letter-image {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 200px;
-  height: 200px;
-  transform: translate(-50%, -50%);
+  position: relative;
+  width: 600px;  /* 3x bigger */
+  height: 600px; /* 3x bigger */
   cursor: pointer;
 }
 
 .animated-mail {
   position: absolute;
-  height: 150px;
-  width: 200px;
+  width: 100%;
+  height: 75%;
   transition: 0.4s;
 }
 
@@ -33,18 +35,18 @@ body {
   width: 0;
   height: 0;
   border-style: solid;
-  border-width: 0 0 100px 200px;
+  border-width: 0 0 300px 600px;
   border-color: transparent transparent #e95f55 transparent;
   z-index: 2;
 }
 
 .animated-mail .top-fold {
   position: absolute;
-  top: 50px;
+  top: 150px;
   width: 0;
   height: 0;
   border-style: solid;
-  border-width: 50px 100px 0 100px;
+  border-width: 150px 300px 0 300px;
   transform-origin: 50% 0%;
   transition: transform 0.4s 0.4s, z-index 0.2s 0.4s;
   border-color: #cf4a43 transparent transparent transparent;
@@ -54,8 +56,8 @@ body {
 .animated-mail .back-fold {
   position: absolute;
   bottom: 0;
-  width: 200px;
-  height: 100px;
+  width: 600px;
+  height: 300px;
   background: #cf4a43;
   z-index: 0;
 }
@@ -66,18 +68,18 @@ body {
   width: 0;
   height: 0;
   border-style: solid;
-  border-width: 50px 0 50px 100px;
+  border-width: 150px 0 150px 300px;
   border-color: transparent transparent transparent #e15349;
   z-index: 2;
 }
 
-/* Letter inside envelope */
+/* Letter inside */
 .animated-mail .letter {
-  left: 20px;
+  left: 60px;
   bottom: 0px;
   position: absolute;
-  width: 160px;
-  height: 60px;
+  width: 480px;
+  height: 180px;
   background: white;
   z-index: 1;
   overflow: hidden;
@@ -89,83 +91,97 @@ body {
 }
 
 .letter .letter-border {
-  height: 10px;
+  height: 30px;
   width: 100%;
   background: repeating-linear-gradient(
     -45deg,
     #cb5a5e,
-    #cb5a5e 8px,
-    transparent 8px,
-    transparent 18px
+    #cb5a5e 24px,
+    transparent 24px,
+    transparent 54px
   );
 }
 
 .letter .letter-title {
   font-weight: bold;
-  font-size: 16px;
+  font-size: 48px;
   color: #cb5a5e;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
+  text-align: center;
 }
 
 .letter .letter-context {
   font-weight: bold;
-  font-size: 18px;
+  font-size: 36px;
   color: #ff4d4d;
   text-align: center;
 }
 
-/* Stamp */
-.letter .letter-stamp {
-  margin-top: 5px;
-  border-radius: 100%;
-  height: 30px;
-  width: 30px;
-  background: #cb5a5e;
-  opacity: 0.3;
+.letter .letter-context span {
+  display: block;
+  font-size: 28px;
+  color: #ff9999;
+  margin-top: 10px;
 }
 
 /* Shadow */
 .shadow {
   position: absolute;
-  top: 200px;
+  bottom: 0;
   left: 50%;
-  width: 400px;
-  height: 30px;
+  width: 1200px;
+  height: 90px;
   transform: translateX(-50%);
   border-radius: 100%;
-  background: radial-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.0), rgba(0,0,0,0.0));
+  background: radial-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.0));
   transition: 0.4s;
 }
 
 /* Hover/open effect */
-.letter-image:hover .animated-mail {
-  transform: translateY(50px);
+.letter-image.open .animated-mail {
+  transform: translateY(150px);
 }
 
-.letter-image:hover .animated-mail .top-fold {
+.letter-image.open .animated-mail .top-fold {
   transform: rotateX(180deg);
   z-index: 0;
 }
 
-.letter-image:hover .animated-mail .letter {
-  height: 180px;
+.letter-image.open .animated-mail .letter {
+  height: 540px;
 }
 
-.letter-image:hover .shadow {
-  width: 250px;
+.letter-image.open .shadow {
+  width: 750px;
+}
+
+/* Sparkles */
+.sparkle {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: gold;
+  border-radius: 50%;
+  opacity: 0;
+  animation: sparkle 1s ease-in-out forwards;
+}
+
+@keyframes sparkle {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.5); opacity: 1; }
+  100% { transform: scale(0); opacity: 0; }
 }
 </style>
 </head>
 <body>
 
-<div class="letter-image">
+<div class="letter-image" id="letter">
   <div class="animated-mail">
     <div class="back-fold"></div>
     <div class="letter">
       <div class="letter-border"></div>
-      <div class="letter-title">Happy Birthday</div>
-      <div class="letter-context">Rob!</div>
-      <div class="letter-stamp"></div>
+      <div class="letter-title">Happy Birthday Rob!</div>
+      <div class="letter-context"><span>At least you're not 31</span></div>
     </div>
     <div class="top-fold"></div>
     <div class="body"></div>
@@ -173,6 +189,27 @@ body {
   </div>
   <div class="shadow"></div>
 </div>
+
+<script>
+const letter = document.getElementById('letter');
+
+letter.addEventListener('click', () => {
+  letter.classList.add('open');
+  spawnSparkles();
+});
+
+function spawnSparkles() {
+  for (let i=0; i<50; i++) {
+    const sparkle = document.createElement('div');
+    sparkle.className = 'sparkle';
+    sparkle.style.top = Math.random() * 600 + 'px';
+    sparkle.style.left = Math.random() * 600 + 'px';
+    sparkle.style.animationDelay = (Math.random() * 1) + 's';
+    letter.appendChild(sparkle);
+    setTimeout(() => sparkle.remove(), 1500);
+  }
+}
+</script>
 
 </body>
 </html>
