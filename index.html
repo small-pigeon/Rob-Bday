@@ -5,6 +5,10 @@
 <title>Happy Birthday Rob!</title>
 
 <style>
+:root {
+  --scale: min(1, 90vw / 600);
+}
+
 body {
   background: #323641;
   font-family: 'Comic Sans MS', cursive, sans-serif;
@@ -15,6 +19,12 @@ body {
   align-items: center;
 }
 
+/* SCALE EVERYTHING */
+.scene {
+  transform: scale(var(--scale));
+}
+
+/* CONTAINER */
 .letter-image {
   position: relative;
   width: 600px;
@@ -26,15 +36,13 @@ body {
   position: absolute;
   width: 100%;
   height: 75%;
-  transition: 0.4s;
+  transition: transform 0.4s;
 }
 
 /* ENVELOPE */
 .body {
   position: absolute;
   bottom: 0;
-  width: 0;
-  height: 0;
   border-style: solid;
   border-width: 0 0 300px 600px;
   border-color: transparent transparent #e95f55 transparent;
@@ -44,8 +52,6 @@ body {
 .top-fold {
   position: absolute;
   top: 150px;
-  width: 0;
-  height: 0;
   border-style: solid;
   border-width: 150px 300px 0 300px;
   transform-origin: 50% 0%;
@@ -66,8 +72,6 @@ body {
 .left-fold {
   position: absolute;
   bottom: 0;
-  width: 0;
-  height: 0;
   border-style: solid;
   border-width: 150px 0 150px 300px;
   border-color: transparent transparent transparent #e15349;
@@ -76,19 +80,16 @@ body {
 
 /* LETTER */
 .letter {
+  position: absolute;
   left: 60px;
   bottom: 0;
-  position: absolute;
   width: 480px;
   height: 180px;
   background: white;
   z-index: 1;
   overflow: hidden;
-  transition: 0.4s 0.2s;
-
-  /* IMPORTANT FIX */
-  display: block;
-  padding: 40px 30px 30px;
+  transition: height 0.4s 0.2s;
+  padding: 40px 30px;
   box-sizing: border-box;
 }
 
@@ -108,32 +109,32 @@ body {
 }
 
 .letter-title {
-  margin-top: 20px;
-  font-weight: bold;
+  margin-top: 30px;
   font-size: 48px;
+  font-weight: bold;
   color: #cb5a5e;
   text-align: center;
 }
 
 .letter-context {
   margin-top: 20px;
-  font-weight: bold;
   font-size: 30px;
+  font-weight: bold;
   color: #ff4d4d;
   text-align: center;
 }
 
-/* SHADOW */
+/* SHADOW (MOVES DOWN) */
 .shadow {
   position: absolute;
-  bottom: 0;
+  top: 450px;
   left: 50%;
   width: 1200px;
   height: 90px;
   transform: translateX(-50%);
   border-radius: 100%;
-  background: radial-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.0));
-  transition: 0.4s;
+  background: radial-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0));
+  transition: all 0.4s;
 }
 
 /* OPEN STATE */
@@ -151,65 +152,70 @@ body {
 }
 
 .letter-image.open .shadow {
+  top: 600px;
   width: 750px;
 }
 
-/* SPARKLES */
-.sparkle {
+/* CONFETTI */
+.confetti {
   position: absolute;
-  width: 12px;
-  height: 12px;
-  background: gold;
-  border-radius: 50%;
-  opacity: 0;
-  animation: sparkle 1s ease-in-out forwards;
+  width: 10px;
+  height: 14px;
+  opacity: 0.9;
+  animation: fall 1.5s ease-out forwards;
 }
 
-@keyframes sparkle {
-  0% { transform: scale(0); opacity: 0; }
-  50% { transform: scale(1.5); opacity: 1; }
-  100% { transform: scale(0); opacity: 0; }
+@keyframes fall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(300px) rotate(360deg); opacity: 0; }
 }
 </style>
 </head>
 
 <body>
 
-<div class="letter-image" id="letter">
-  <div class="animated-mail">
-    <div class="back-fold"></div>
+<div class="scene">
+  <div class="letter-image" id="letter">
+    <div class="animated-mail">
+      <div class="back-fold"></div>
 
-    <div class="letter">
-      <div class="letter-border"></div>
-      <div class="letter-title">Happy Birthday Rob!</div>
-      <div class="letter-context">At least you're not 31</div>
+      <div class="letter">
+        <div class="letter-border"></div>
+        <div class="letter-title">Happy Birthday Rob!</div>
+        <div class="letter-context">At least you're not 31</div>
+      </div>
+
+      <div class="top-fold"></div>
+      <div class="body"></div>
+      <div class="left-fold"></div>
     </div>
 
-    <div class="top-fold"></div>
-    <div class="body"></div>
-    <div class="left-fold"></div>
+    <div class="shadow"></div>
   </div>
-
-  <div class="shadow"></div>
 </div>
 
 <script>
 const letter = document.getElementById('letter');
 
 letter.addEventListener('click', () => {
+  if (letter.classList.contains('open')) return;
   letter.classList.add('open');
-  spawnSparkles();
+  launchConfetti();
 });
 
-function spawnSparkles() {
-  for (let i = 0; i < 50; i++) {
-    const sparkle = document.createElement('div');
-    sparkle.className = 'sparkle';
-    sparkle.style.top = Math.random() * 600 + 'px';
-    sparkle.style.left = Math.random() * 600 + 'px';
-    sparkle.style.animationDelay = Math.random() + 's';
-    letter.appendChild(sparkle);
-    setTimeout(() => sparkle.remove(), 1200);
+function launchConfetti() {
+  const colors = ['#ff4d4d', '#ffd700', '#4dd2ff', '#7CFF4D', '#ff9ff3'];
+
+  for (let i = 0; i < 60; i++) {
+    const confetti = document.createElement('div');
+    confetti.className = 'confetti';
+    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+    confetti.style.left = Math.random() * 600 + 'px';
+    confetti.style.top = '200px';
+    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+    letter.appendChild(confetti);
+
+    setTimeout(() => confetti.remove(), 1500);
   }
 }
 </script>
