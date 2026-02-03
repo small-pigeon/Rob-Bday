@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Happy Birthday Rob!</title>
+
 <style>
 body {
   background: #323641;
@@ -16,8 +17,8 @@ body {
 
 .letter-image {
   position: relative;
-  width: 600px;  /* 3x bigger */
-  height: 600px; /* 3x bigger */
+  width: 600px;
+  height: 600px;
   cursor: pointer;
 }
 
@@ -28,8 +29,8 @@ body {
   transition: 0.4s;
 }
 
-/* Envelope parts */
-.animated-mail .body {
+/* ENVELOPE */
+.body {
   position: absolute;
   bottom: 0;
   width: 0;
@@ -40,7 +41,7 @@ body {
   z-index: 2;
 }
 
-.animated-mail .top-fold {
+.top-fold {
   position: absolute;
   top: 150px;
   width: 0;
@@ -53,7 +54,7 @@ body {
   z-index: 2;
 }
 
-.animated-mail .back-fold {
+.back-fold {
   position: absolute;
   bottom: 0;
   width: 600px;
@@ -62,7 +63,7 @@ body {
   z-index: 0;
 }
 
-.animated-mail .left-fold {
+.left-fold {
   position: absolute;
   bottom: 0;
   width: 0;
@@ -73,10 +74,10 @@ body {
   z-index: 2;
 }
 
-/* Letter inside */
-.animated-mail .letter {
+/* LETTER */
+.letter {
   left: 60px;
-  bottom: 0px;
+  bottom: 0;
   position: absolute;
   width: 480px;
   height: 180px;
@@ -84,13 +85,17 @@ body {
   z-index: 1;
   overflow: hidden;
   transition: 0.4s 0.2s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+
+  /* IMPORTANT FIX */
+  display: block;
+  padding: 40px 30px 30px;
+  box-sizing: border-box;
 }
 
-.letter .letter-border {
+.letter-border {
+  position: absolute;
+  top: 0;
+  left: 0;
   height: 30px;
   width: 100%;
   background: repeating-linear-gradient(
@@ -102,29 +107,23 @@ body {
   );
 }
 
-.letter .letter-title {
+.letter-title {
+  margin-top: 20px;
   font-weight: bold;
   font-size: 48px;
   color: #cb5a5e;
-  margin-bottom: 10px;
   text-align: center;
 }
 
-.letter .letter-context {
+.letter-context {
+  margin-top: 20px;
   font-weight: bold;
-  font-size: 36px;
+  font-size: 30px;
   color: #ff4d4d;
   text-align: center;
 }
 
-.letter .letter-context span {
-  display: block;
-  font-size: 28px;
-  color: #ff9999;
-  margin-top: 10px;
-}
-
-/* Shadow */
+/* SHADOW */
 .shadow {
   position: absolute;
   bottom: 0;
@@ -137,17 +136,17 @@ body {
   transition: 0.4s;
 }
 
-/* Hover/open effect */
+/* OPEN STATE */
 .letter-image.open .animated-mail {
   transform: translateY(150px);
 }
 
-.letter-image.open .animated-mail .top-fold {
+.letter-image.open .top-fold {
   transform: rotateX(180deg);
   z-index: 0;
 }
 
-.letter-image.open .animated-mail .letter {
+.letter-image.open .letter {
   height: 540px;
 }
 
@@ -155,7 +154,7 @@ body {
   width: 750px;
 }
 
-/* Sparkles */
+/* SPARKLES */
 .sparkle {
   position: absolute;
   width: 12px;
@@ -173,20 +172,24 @@ body {
 }
 </style>
 </head>
+
 <body>
 
 <div class="letter-image" id="letter">
   <div class="animated-mail">
     <div class="back-fold"></div>
+
     <div class="letter">
       <div class="letter-border"></div>
       <div class="letter-title">Happy Birthday Rob!</div>
-      <div class="letter-context"><span>At least you're not 31</span></div>
+      <div class="letter-context">At least you're not 31</div>
     </div>
+
     <div class="top-fold"></div>
     <div class="body"></div>
     <div class="left-fold"></div>
   </div>
+
   <div class="shadow"></div>
 </div>
 
@@ -199,14 +202,14 @@ letter.addEventListener('click', () => {
 });
 
 function spawnSparkles() {
-  for (let i=0; i<50; i++) {
+  for (let i = 0; i < 50; i++) {
     const sparkle = document.createElement('div');
     sparkle.className = 'sparkle';
     sparkle.style.top = Math.random() * 600 + 'px';
     sparkle.style.left = Math.random() * 600 + 'px';
-    sparkle.style.animationDelay = (Math.random() * 1) + 's';
+    sparkle.style.animationDelay = Math.random() + 's';
     letter.appendChild(sparkle);
-    setTimeout(() => sparkle.remove(), 1500);
+    setTimeout(() => sparkle.remove(), 1200);
   }
 }
 </script>
