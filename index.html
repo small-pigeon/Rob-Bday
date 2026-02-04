@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Happy Birthday Rob</title>
+<title>Happy Birthday Rob!</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 
@@ -31,7 +31,6 @@ body {
   cursor: pointer;
 }
 
-/* ENVELOPE */
 .animated-mail {
   position: absolute;
   width: 100%;
@@ -53,9 +52,9 @@ body {
   top: 150px;
   border-style: solid;
   border-width: 150px 300px 0 300px;
-  border-color: #cf4a43 transparent transparent transparent;
   transform-origin: 50% 0%;
   transition: transform 0.5s 0.3s, z-index 0.2s 0.3s;
+  border-color: #cf4a43 transparent transparent transparent;
   z-index: 2;
 }
 
@@ -77,7 +76,6 @@ body {
   z-index: 2;
 }
 
-/* LETTER */
 .letter {
   position: absolute;
   left: 60px;
@@ -134,6 +132,7 @@ body {
   border-radius: 40px;
   cursor: pointer;
   box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+  transition: transform 0.2s;
 }
 
 .read-btn:hover {
@@ -147,6 +146,7 @@ body {
   font-size: 24px;
   color: #444;
   white-space: pre-line;
+  text-align: left;
 }
 
 /* SHADOW */
@@ -164,7 +164,7 @@ body {
 
 /* PEEK STATE */
 .letter-image.peek .animated-mail {
-  transform: translateY(120px);
+  transform: translateY(150px); /* envelope moves down */
 }
 
 .letter-image.peek .top-fold {
@@ -174,7 +174,12 @@ body {
 
 .letter-image.peek .letter {
   height: 260px;
-  transform: translateY(-80px); /* 👈 lifts letter up */
+  transform: translateY(-140px); /* lifts letter up */
+}
+
+.letter-image.peek .shadow {
+  top: 600px;
+  width: 750px;
 }
 
 /* FULL OPEN STATE */
@@ -184,7 +189,7 @@ body {
 
 .letter-image.fully-open .letter {
   height: 520px;
-  transform: translateY(-220px); /* 👈 fully out & in front */
+  transform: translateY(-220px);
   z-index: 5;
 }
 
@@ -222,12 +227,14 @@ body {
       <div class="letter">
         <div class="letter-border"></div>
 
+        <!-- PREVIEW CONTENT -->
         <div id="preview">
           <h1>Happy Birthday Rob!</h1>
           <p>At least you’re not 31 😄</p>
           <button class="read-btn" id="readBtn">Read me 💌</button>
         </div>
 
+        <!-- FULL MESSAGE -->
         <div class="message" id="message">
 Dear Rob,
 
@@ -257,7 +264,7 @@ const readBtn = document.getElementById('readBtn');
 const message = document.getElementById('message');
 const preview = document.getElementById('preview');
 
-let stage = 0;
+let stage = 0; // 0 = closed, 1 = peek, 2 = fully open
 
 /* Ta-da sound */
 function playTaDa() {
@@ -289,7 +296,7 @@ function sparkles() {
   }
 }
 
-/* CLICK ENVELOPE */
+/* CLICK ENVELOPE → PEEK */
 letterImage.addEventListener('click', () => {
   if (stage !== 0) return;
   stage = 1;
@@ -298,15 +305,13 @@ letterImage.addEventListener('click', () => {
   sparkles();
 });
 
-/* CLICK READ */
+/* CLICK READ → FULL OPEN */
 readBtn.addEventListener('click', (e) => {
   e.stopPropagation();
   if (stage !== 1) return;
   stage = 2;
-
   letterImage.classList.remove('peek');
   letterImage.classList.add('fully-open');
-
   preview.style.display = 'none';
   message.style.display = 'block';
 });
