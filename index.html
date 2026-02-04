@@ -230,6 +230,8 @@ const letter = document.getElementById('letter');
 const readBtn = document.getElementById('readBtn');
 const message = document.getElementById('message');
 
+let stage = 0;
+
 /* Ta-da sound */
 function playTaDa() {
   const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -250,7 +252,7 @@ function playTaDa() {
 
 /* Sparkles */
 function sparkles() {
-  for (let i = 0; i < 35; i++) {
+  for (let i = 0; i < 30; i++) {
     const s = document.createElement('div');
     s.className = 'sparkle';
     s.style.left = Math.random() * 600 + 'px';
@@ -260,9 +262,21 @@ function sparkles() {
   }
 }
 
-readBtn.addEventListener('click', () => {
-  if (letter.classList.contains('open')) return;
+/* STAGE 1 — click envelope */
+letter.addEventListener('click', () => {
+  if (stage !== 0) return;
+  stage = 1;
+
   letter.classList.add('open');
+  sparkles();
+});
+
+/* STAGE 2 — click Read */
+readBtn.addEventListener('click', (e) => {
+  e.stopPropagation(); // prevents re-triggering envelope click
+  if (stage !== 1) return;
+  stage = 2;
+
   readBtn.style.display = 'none';
   message.style.display = 'block';
   playTaDa();
