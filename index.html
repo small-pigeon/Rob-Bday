@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Happy Birthday Rob!</title>
+<title>Happy Birthday Rob</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 
@@ -12,9 +12,9 @@
 }
 
 body {
-  background: #323641;
   margin: 0;
   height: 100vh;
+  background: #323641;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,6 +28,7 @@ body {
   position: relative;
   width: 600px;
   height: 600px;
+  cursor: pointer;
 }
 
 /* ENVELOPE */
@@ -52,9 +53,9 @@ body {
   top: 150px;
   border-style: solid;
   border-width: 150px 300px 0 300px;
+  border-color: #cf4a43 transparent transparent transparent;
   transform-origin: 50% 0%;
   transition: transform 0.5s 0.3s, z-index 0.2s 0.3s;
-  border-color: #cf4a43 transparent transparent transparent;
   z-index: 2;
 }
 
@@ -106,11 +107,24 @@ body {
   );
 }
 
+/* PREVIEW CONTENT */
+#preview h1 {
+  font-family: 'Pacifico', cursive;
+  color: #ff4d4d;
+  text-align: center;
+  margin-top: 30px;
+}
+
+#preview p {
+  font-family: 'Pacifico', cursive;
+  font-size: 22px;
+  text-align: center;
+}
+
+/* READ BUTTON */
 .read-btn {
-  margin-top: 60px;
   display: block;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 30px auto 0;
   padding: 12px 30px;
   font-family: 'Pacifico', cursive;
   font-size: 26px;
@@ -120,23 +134,19 @@ body {
   border-radius: 40px;
   cursor: pointer;
   box-shadow: 0 6px 15px rgba(0,0,0,0.25);
-  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .read-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
 }
 
-/* MESSAGE */
+/* FULL MESSAGE */
 .message {
   display: none;
-  margin-top: 30px;
   font-family: 'Pacifico', cursive;
   font-size: 24px;
   color: #444;
   white-space: pre-line;
-  text-align: left;
 }
 
 /* SHADOW */
@@ -152,23 +162,33 @@ body {
   transition: all 0.5s;
 }
 
-/* OPEN STATE */
-.letter-image.open .animated-mail {
-  transform: translateY(150px);
+/* PEEK STATE */
+.letter-image.peek .animated-mail {
+  transform: translateY(120px);
 }
 
-.letter-image.open .top-fold {
+.letter-image.peek .top-fold {
   transform: rotateX(180deg);
   z-index: 0;
 }
 
-.letter-image.open .letter {
-  height: 520px;
+.letter-image.peek .letter {
+  height: 260px;
 }
 
-.letter-image.open .shadow {
-  top: 600px;
-  width: 750px;
+/* FULL OPEN */
+.letter-image.fully-open .animated-mail {
+  transform: translateY(200px);
+}
+
+.letter-image.fully-open .letter {
+  height: 520px;
+  z-index: 5;
+}
+
+.letter-image.fully-open .shadow {
+  top: 620px;
+  width: 700px;
 }
 
 /* SPARKLES */
@@ -200,7 +220,11 @@ body {
       <div class="letter">
         <div class="letter-border"></div>
 
-        <button class="read-btn" id="readBtn">Read 💌</button>
+        <div id="preview">
+          <h1>Happy Birthday Rob!</h1>
+          <p>At least you’re not 31 😄</p>
+          <button class="read-btn" id="readBtn">Read me 💌</button>
+        </div>
 
         <div class="message" id="message">
 Dear Rob,
@@ -226,9 +250,10 @@ Your L&amp;OD Family
 </div>
 
 <script>
-const letter = document.getElementById('letter');
+const letterImage = document.getElementById('letter');
 const readBtn = document.getElementById('readBtn');
 const message = document.getElementById('message');
+const preview = document.getElementById('preview');
 
 let stage = 0;
 
@@ -241,9 +266,9 @@ function playTaDa() {
     const g = ctx.createGain();
     o.frequency.value = f;
     o.type = 'triangle';
-    g.gain.setValueAtTime(0.0001, now + i * 0.08);
+    g.gain.setValueAtTime(0.001, now + i * 0.08);
     g.gain.exponentialRampToValueAtTime(0.15, now + i * 0.08 + 0.05);
-    g.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.08 + 0.4);
+    g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.4);
     o.connect(g).connect(ctx.destination);
     o.start(now + i * 0.08);
     o.stop(now + i * 0.08 + 0.5);
@@ -256,31 +281,32 @@ function sparkles() {
     const s = document.createElement('div');
     s.className = 'sparkle';
     s.style.left = Math.random() * 600 + 'px';
-    s.style.top = Math.random() * 300 + 'px';
-    letter.appendChild(s);
+    s.style.top = Math.random() * 250 + 'px';
+    letterImage.appendChild(s);
     setTimeout(() => s.remove(), 1200);
   }
 }
 
-/* STAGE 1 — click envelope */
-letter.addEventListener('click', () => {
+/* CLICK ENVELOPE */
+letterImage.addEventListener('click', () => {
   if (stage !== 0) return;
   stage = 1;
-
-  letter.classList.add('open');
+  letterImage.classList.add('peek');
+  playTaDa();
   sparkles();
 });
 
-/* STAGE 2 — click Read */
+/* CLICK READ */
 readBtn.addEventListener('click', (e) => {
-  e.stopPropagation(); // prevents re-triggering envelope click
+  e.stopPropagation();
   if (stage !== 1) return;
   stage = 2;
 
-  readBtn.style.display = 'none';
+  letterImage.classList.remove('peek');
+  letterImage.classList.add('fully-open');
+
+  preview.style.display = 'none';
   message.style.display = 'block';
-  playTaDa();
-  sparkles();
 });
 </script>
 
