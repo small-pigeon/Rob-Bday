@@ -87,7 +87,7 @@ body {
   background: white;
   z-index: 1;
   overflow: hidden;
-  transition: height 0.5s;
+  transition: height 0.5s, transform 0.5s;
   padding: 40px 35px;
   box-sizing: border-box;
 }
@@ -174,15 +174,17 @@ body {
 
 .letter-image.peek .letter {
   height: 260px;
+  transform: translateY(-80px); /* 👈 lifts letter up */
 }
 
-/* FULL OPEN */
+/* FULL OPEN STATE */
 .letter-image.fully-open .animated-mail {
   transform: translateY(200px);
 }
 
 .letter-image.fully-open .letter {
   height: 520px;
+  transform: translateY(-220px); /* 👈 fully out & in front */
   z-index: 5;
 }
 
